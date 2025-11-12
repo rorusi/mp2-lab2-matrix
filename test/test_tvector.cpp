@@ -26,7 +26,10 @@ TEST(TDynamicVector, can_create_copied_vector)
 
 TEST(TDynamicVector, copied_vector_is_equal_to_source_one)
 {
-  ADD_FAILURE();
+  TDynamicVector<int> v(10);
+  TDynamicVector<int> v1(v);
+
+  EXPECT_EQ(v, v1);
 }
 
 TEST(TDynamicVector, copied_vector_has_its_own_memory)
@@ -51,91 +54,169 @@ TEST(TDynamicVector, can_get_size)
 
 TEST(TDynamicVector, throws_when_set_element_with_negative_index)
 {
-  ADD_FAILURE();
+	TDynamicVector<int> v(5);
+
+	ASSERT_ANY_THROW(v[-1]=3);
 }
 
 TEST(TDynamicVector, throws_when_set_element_with_too_large_index)
 {
-  ADD_FAILURE();
+	TDynamicVector<int> v(5);
+
+	ASSERT_ANY_THROW(v[6] = 3);
 }
 
 TEST(TDynamicVector, can_assign_vector_to_itself)
 {
-  ADD_FAILURE();
+	TDynamicVector<int> v(5);
+	v[2] = 2;
+	ASSERT_NO_THROW(v = v);
 }
 
 TEST(TDynamicVector, can_assign_vectors_of_equal_size)
 {
-  ADD_FAILURE();
+	size_t size = 5;
+	TDynamicVector<int> v1(size), v2(size);
+	v1[0] = 1;
+	v2[1] = 3;
+	v1 = v2;
+	EXPECT_EQ(v1, v2);
 }
 
 TEST(TDynamicVector, assign_operator_change_vector_size)
 {
-  ADD_FAILURE();
+	TDynamicVector<int> v1(5);
+	TDynamicVector<int> v2(8);
+	v1 = v2;
+	EXPECT_EQ(v1.size(), 8);
 }
 
 TEST(TDynamicVector, can_assign_vectors_of_different_size)
 {
-  ADD_FAILURE();
+  size_t size1 = 5, size2 = 8;
+  TDynamicVector<int> v1(size1), v2(size2);
+  v1[0] = 1;
+  v2[1] = 3;
+  v1 = v2;
+  EXPECT_EQ(v1, v2);
 }
 
 TEST(TDynamicVector, compare_equal_vectors_return_true)
 {
-  ADD_FAILURE();
+	size_t size = 5;
+	TDynamicVector<int> v1(size), v2(size);
+	v1[0] = 1;
+	v2[0] = 1;
+	EXPECT_EQ(v1==v2, true);
 }
 
 TEST(TDynamicVector, compare_vector_with_itself_return_true)
 {
-  ADD_FAILURE();
+	TDynamicVector<int> v(5);
+	v[0] = 1;
+	EXPECT_EQ(v == v, true);
 }
 
 TEST(TDynamicVector, vectors_with_different_size_are_not_equal)
 {
-  ADD_FAILURE();
+	size_t size1 = 5, size2 = 8;
+	TDynamicVector<int> v1(size1), v2(size2);
+	v1[0] = 1;
+	v2[0] = 1;
+	EXPECT_NE(v1 == v2, true);
 }
 
 TEST(TDynamicVector, can_add_scalar_to_vector)
 {
-  ADD_FAILURE();
+	size_t size = 3;
+	TDynamicVector<int> v1(size), v2(size), v3(size);
+	int val = 3;
+	v1[0] = 1;
+	v2 = v1 + val;
+	v3[0] = 4; v3[1] = 3; v3[2] = 3;
+	EXPECT_EQ(v2, v3);
 }
 
 TEST(TDynamicVector, can_subtract_scalar_from_vector)
 {
-  ADD_FAILURE();
+	size_t size = 3;
+	TDynamicVector<int> v1(size), v2(size), v3(size);
+	int val = 3;
+	v1[0] = 1;
+	v2 = v1 - val;
+	v3[0] = -2; v3[1] = -3; v3[2] = -3;
+	EXPECT_EQ(v2, v3);
 }
 
 TEST(TDynamicVector, can_multiply_scalar_by_vector)
 {
-  ADD_FAILURE();
+	size_t size = 3;
+	TDynamicVector<int> v1(size), v2(size), v3(size);
+	int val = 3;
+	v1[0] = 1; v1[1] = 2; v1[2] = 3;
+	v2 = v1 * val;
+	v3[0] = 3; v3[1] = 6; v3[2] = 9;
+	EXPECT_EQ(v2, v3);
 }
 
 TEST(TDynamicVector, can_add_vectors_with_equal_size)
 {
-  ADD_FAILURE();
+	size_t size = 3;
+	TDynamicVector<int> v1(size), v2(size), v3(size), v4(size);
+	v1[0] = 1;
+	v2[2] = 2;
+	v3 = v1 + v2;
+	v4[0] = 1; v4[2] = 2;
+	EXPECT_EQ(v3, v4);
 }
 
 TEST(TDynamicVector, cant_add_vectors_with_not_equal_size)
 {
-  ADD_FAILURE();
+	size_t size1 = 5, size2 = 8;
+	TDynamicVector<int> v1(size1), v2(size2);
+	v1[0] = 1;
+	v2[3] = 2;
+	ASSERT_ANY_THROW(v1+v2);
 }
 
 TEST(TDynamicVector, can_subtract_vectors_with_equal_size)
 {
-  ADD_FAILURE();
+	size_t size = 3;
+	TDynamicVector<int> v1(size), v2(size), v3(size), v4(size);
+	v1[0] = 1;
+	v2[2] = 2;
+	v3 = v1 - v2;
+	v4[0] = 1; v4[2] = -2;
+	EXPECT_EQ(v3, v4);
 }
 
 TEST(TDynamicVector, cant_subtract_vectors_with_not_equal_size)
 {
-  ADD_FAILURE();
+	size_t size1 = 5, size2 = 8;
+	TDynamicVector<int> v1(size1), v2(size2);
+	v1[0] = 1;
+	v2[3] = 2;
+	ASSERT_ANY_THROW(v1 - v2);
 }
 
 TEST(TDynamicVector, can_multiply_vectors_with_equal_size)
 {
-  ADD_FAILURE();
+	size_t size = 3;
+	TDynamicVector<int> v1(size), v2(size);
+	int v3;
+	v1[0] = 1; v1[1] = 2; v1[2] = 3;
+	v2[0] = 2; v2[1] = 5; v2[2] = 7;
+	v3 = v1 * v2;
+	EXPECT_EQ(v3, 33);
 }
 
 TEST(TDynamicVector, cant_multiply_vectors_with_not_equal_size)
 {
-  ADD_FAILURE();
+	size_t size1 = 3, size2 = 4;
+	TDynamicVector<int> v1(size1), v2(size2);
+	int v3;
+	v1[0] = 1; v1[1] = 2; v1[2] = 3;
+	v2[0] = 2; v2[1] = 5; v2[2] = 7; v2[3] = 10;
+	ASSERT_ANY_THROW(v1 * v2);
 }
 
