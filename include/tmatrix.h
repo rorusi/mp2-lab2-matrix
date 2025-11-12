@@ -99,7 +99,7 @@ public:
   {
       if (sz != v.sz) return false;
       for (size_t i = 0; i < sz; i++)
-          if (pMem[i] != v[i])
+          if ((*this)[i] != v[i])
               return false;
       return true;
   }
@@ -107,7 +107,7 @@ public:
   {
       if (sz != v.sz) return true;
       for (size_t i = 0; i < sz; i++)
-          if (pMem[i] != v[i])
+          if ((*this)[i] != v[i])
               return true;
       return false;
   }
@@ -117,21 +117,21 @@ public:
   {
       TDynamicVector res(sz);
       for (size_t i = 0; i < sz; i++)
-          res[i] = pMem[i] + val;
+          res[i] = (*this)[i] + val;
       return res;
   }
   TDynamicVector operator-(T val)
   {
       TDynamicVector res(sz);
       for (size_t i = 0; i < sz; i++)
-          res[i] = pMem[i] - val;
+          res[i] = (*this)[i] - val;
       return res;
   }
   TDynamicVector operator*(T val)
   {
       TDynamicVector res(sz);
       for (size_t i = 0; i < sz; i++)
-          res[i] = pMem[i] * val;
+          res[i] = (*this)[i] * val;
       return res;
   }
 
@@ -141,7 +141,7 @@ public:
       if (sz != v.sz) throw - 1;
       TDynamicVector res(sz);
       for (size_t i = 0; i < sz; i++)
-          res.pMem[i] = pMem[i] + v.pMem[i];
+          res[i] = (*this)[i] + v[i];
       return res;
   }
   TDynamicVector operator-(const TDynamicVector& v)
@@ -149,7 +149,7 @@ public:
       if (sz != v.sz) throw - 1;
       TDynamicVector res(sz);
       for (size_t i = 0; i < sz; i++)
-          res.pMem[i] = pMem[i] - v.pMem[i];
+          res[i] = (*this)[i] - v[i];
       return res;
   }
   T operator*(const TDynamicVector& v) noexcept(noexcept(T()))
@@ -157,7 +157,7 @@ public:
       if (sz != v.sz) throw - 1;
       T res = 0;
       for (size_t i = 0; i < sz; i++)
-          res += pMem[i] * v[i];
+          res += (*this)[i] * v[i];
       return res;
   }
 
@@ -171,13 +171,13 @@ public:
   friend istream& operator>>(istream& istr, TDynamicVector& v)
   {
     for (size_t i = 0; i < v.sz; i++)
-      istr >> v.pMem[i]; // требуется оператор>> для типа T
+      istr >> v[i]; // требуется оператор>> для типа T
     return istr;
   }
   friend ostream& operator<<(ostream& ostr, const TDynamicVector& v)
   {
     for (size_t i = 0; i < v.sz; i++)
-      ostr << v.pMem[i] << ' '; // требуется оператор<< для типа T
+      ostr << v[i] << ' '; // требуется оператор<< для типа T
     return ostr;
   }
 };
@@ -210,19 +210,21 @@ public:
   // матрично-скалярные операции
   TDynamicMatrix operator*(const T& val)
   {
-      TDynamicMatrix res(sz);
-      for (size_t i = 0; i < sz; i++)
-          res.pMem[i] = pMem[i] * val;
-      return res;
+      //TDynamicMatrix res(sz);
+      //for (size_t i = 0; i < sz; i++)
+      //    res.pMem[i] = pMem[i] * val;
+      //return res;
+      return TDynamicVector<TDynamicVector<T>>::operator*(val);
   }
 
   // матрично-векторные операции
   TDynamicVector<T> operator*(const TDynamicVector<T>& v)
   {
-      TDynamicVector<T> res(sz);
-      for (size_t i = 0; i < sz; i++)
-          res[i] = pMem[i] * v;
-      return res;
+      //TDynamicVector<T> res(sz);
+      //for (size_t i = 0; i < sz; i++)
+      //    res[i] = pMem[i] * v;
+      //return res;
+      return TDynamicVector<TDynamicVector<T>>::operator*(v);
   }
 
   // матрично-матричные операции
@@ -230,15 +232,17 @@ public:
   {
       TDynamicMatrix res(sz);
       for (size_t i = 0; i < sz; i++)
-          res[i] = pMem[i] + m[i];
+          res[i] = (*this)[i] + m[i];
       return res;
+      //return TDynamicVector<TDynamicVector<T>>::operator+(m);
   }
   TDynamicMatrix operator-(const TDynamicMatrix& m)
   {
       TDynamicMatrix res(sz);
       for (size_t i = 0; i < sz; i++)
-          res[i] = pMem[i] - m[i];
+          res[i] = (*this)[i] - m[i];
       return res;
+      //return TDynamicVector<TDynamicVector<T>>::operator-(m);
   }
   TDynamicMatrix operator*(const TDynamicMatrix& m)
   {
@@ -246,7 +250,7 @@ public:
       for (size_t i = 0; i < sz; i++)
           for (size_t j = 0; j < sz; j++)
               for (size_t k = 0; k < sz; k++)
-                  res[i][j] += pMem[i][k] * m[k][j];
+                  res[i][j] += (*this)[i][k] * m[k][j];
       return res;
   }
 
